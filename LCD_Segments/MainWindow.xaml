@@ -8,11 +8,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="LCD_Segments">
-
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Canvas x:Name="DesignCanvas" Width="40" Height="80" Background="Black" >
-            <Polygon x:Name="TopSegment" Points="0,0 10,0 8,2 2,2 0,0" Stroke="White" StrokeThickness="1" Fill="White" />
-        </Canvas>
+    
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Loaded="OnLoaded">
+        <!--<Canvas x:Name="DesignCanvas" Width="40" Height="80" Background="Black" >
+            <Polygon x:Name="TopSegment" Stroke="White" StrokeThickness="1" Fill="White" />
+        </Canvas>-->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -27,22 +27,26 @@
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
+
             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
                        Padding="5">Width:</TextBlock>
             <Slider x:Name="SliderWidth" Minimum="9" Maximum="31"
-                    Width="100" StepFrequency="2" Value="9"
+                    Width="100" StepFrequency="1" Value="9"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Grid.Row="0" Grid.Column="1"/>
-            <TextBlock x:Name="WidthSliderValue" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
-            
+            <TextBlock x:Name="WidthSliderValue" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"
+                       Text="{Binding ElementName=SliderWidth, Path=Value, Mode=OneWay,
+                            Converter={StaticResource ValueToText}, ConverterParameter='0'}"/>
+
             <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
                        Padding="5">Height</TextBlock>
             <Slider x:Name="SliderHeight" Minimum="3" Maximum="9"
-                    Width="100" StepFrequency="2" Value="3"
+                    Width="100" StepFrequency="2" SmallChange="2" Value="3"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Grid.Row="1" Grid.Column="1"/>
-            <TextBlock x:Name="HeightSliderValue" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
+            <!--<TextBlock x:Name="HeightSliderValue" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"
+                       Text="{Binding ElementName=SliderHeight, Path=Value, Mode=OneWay,
+                            Converter={StaticResource ValueToText}, ConverterParameter=\{0\}}"/>-->
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
                        Padding="5">Slant</TextBlock>
@@ -50,7 +54,9 @@
                     Width="100" StepFrequency="1" Value="0"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Grid.Row="2" Grid.Column="1"/>
-            <TextBlock x:Name="SlantSliderValue" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
+            <!--<TextBlock x:Name="SlantSliderValue" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"
+                       Text="{Binding ElementName=SliderSlant, Path=Value, Mode=OneWay,
+                            Converter={StaticResource ValueToText}, ConverterParameter=\{0\}}"/>-->
         </Grid>
     </StackPanel>
 </Window>

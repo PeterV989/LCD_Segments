@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="winrt::Windows::UI::Color">
+		<DisplayString>{{ {A} {R} {G} {B}}}</DisplayString>
+		<Expand>
+			<Item Name="Trans">A,x</Item>
+			<Item Name="Red">R,x</Item>
+		</Expand>
+	</Type>
+</AutoVisualizer>

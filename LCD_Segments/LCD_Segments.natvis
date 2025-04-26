@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+	<Type Name="winrt::Windows::Foundation::Point">
+		<DisplayString>{{{X}\,{Y}}}</DisplayString>
+	</Type>
+	<!--<Type Name="const winrt::Windows::Foundation::Point &amp;">
+		<DisplayString>{{{X}, {Y}}}</DisplayString>
+	</Type>-->
+
+	<Type Name="winrt::Microsoft::UI::Xaml::Media::PointCollection">
+		<DisplayString>PointCollection (Size: {Size()})</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>Size()</Size>
+				<ValuePointer>GetAt($i)</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<!--<Type Name="const winrt::Microsoft::UI::Xaml::Media::PointCollection &amp;">
+		<DisplayString>PointCollection (Size: {Size()})</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>Size()</Size>
+				<ValuePointer>GetAt($i)</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>-->
+
+	<Type Name="winrt::Microsoft::UI::Xaml::Shapes::Polygon">
+		<DisplayString>Polygon (Stroke: {Stroke})</DisplayString>
+		<Expand>
+			<ExpandedItem>Points,raw</ExpandedItem>
+		</Expand>
+	</Type>
+	<!--<Type Name="const winrt::Microsoft::UI::Xaml::Shapes::Polygon &amp;">
+		<DisplayString>Polygon (Stroke: {Stroke})</DisplayString>
+		<Expand>
+			<ExpandedItem>Points,raw</ExpandedItem>
+		</Expand>
+	</Type>-->
+
+</AutoVisualizer>

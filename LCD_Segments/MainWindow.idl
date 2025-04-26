@@ -4,7 +4,5 @@ namespace LCD_Segments
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
         MainWindow();
-
-
     }
 }
