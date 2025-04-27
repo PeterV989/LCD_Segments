@@ -30,4 +30,8 @@ namespace winrt::LCD_Segments::implementation
 			OutputDebugStringW(woss.str().c_str());
 		}
 	}
+	void DebugHelpers::DebugOutput(std::wstring const& outText)
+	{
+		OutputDebugStringW(outText.data());
+	}
 }

@@ -10,11 +10,24 @@
     Title="LCD_Segments">
     
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Loaded="OnLoaded">
-        <!--<Canvas x:Name="DesignCanvas" Width="40" Height="80" Background="Black" >
-            <Polygon x:Name="TopSegment" Stroke="White" StrokeThickness="1" Fill="White" />
-        </Canvas>-->
+        <Canvas x:Name="DesignCanvas" Width="100" Height="100" Background="LightGray" >
+            <Polygon x:Name="A_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Red" StrokeThickness="1" Fill="Red" />
+            <Polygon x:Name="B_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Orange" StrokeThickness="1" Fill="Orange" />
+            <Polygon x:Name="C_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Yellow" StrokeThickness="1" Fill="Yellow" />
+            <Polygon x:Name="D_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Green" StrokeThickness="1" Fill="Green" />
+            <Polygon x:Name="E_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Blue" StrokeThickness="1" Fill="Blue" />
+            <Polygon x:Name="F_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Indigo" StrokeThickness="1" Fill="Indigo" />
+            <Polygon x:Name="G_Segment" Canvas.Left="10" Canvas.Top="10" Stroke="Violet" StrokeThickness="1" Fill="Violet" />
+        </Canvas>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -23,40 +36,56 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"
                        Padding="5">Width:</TextBlock>
             <Slider x:Name="SliderWidth" Minimum="9" Maximum="31"
                     Width="100" StepFrequency="1" Value="9"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Grid.Row="0" Grid.Column="1"/>
-            <TextBlock x:Name="WidthSliderValue" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"
+                    Grid.Row="0" Grid.Column="2"/>
+            <TextBlock x:Name="WidthSliderValue" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center"
                        Text="{Binding ElementName=SliderWidth, Path=Value, Mode=OneWay,
                             Converter={StaticResource ValueToText}, ConverterParameter='0'}"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"
                        Padding="5">Height</TextBlock>
-            <Slider x:Name="SliderHeight" Minimum="3" Maximum="9"
-                    Width="100" StepFrequency="2" SmallChange="2" Value="3"
+            <Slider x:Name="SliderHeight" Minimum="2" Maximum="10"
+                    Width="100" StepFrequency="2" SmallChange="2" SnapsTo="StepValues" Value="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Grid.Row="1" Grid.Column="1"/>
-            <!--<TextBlock x:Name="HeightSliderValue" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"
+                    Grid.Row="1" Grid.Column="2"/>
+            <TextBlock x:Name="HeightSliderValue" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center"
                        Text="{Binding ElementName=SliderHeight, Path=Value, Mode=OneWay,
-                            Converter={StaticResource ValueToText}, ConverterParameter=\{0\}}"/>-->
+                            Converter={StaticResource ValueToText}, ConverterParameter='0'}"/>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"
                        Padding="5">Slant</TextBlock>
             <Slider x:Name="SliderSlant" Minimum="0" Maximum="10" 
                     Width="100" StepFrequency="1" Value="0"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Grid.Row="2" Grid.Column="1"/>
-            <!--<TextBlock x:Name="SlantSliderValue" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"
+                    Grid.Row="2" Grid.Column="2"/>
+            <TextBlock x:Name="SlantSliderValue" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"
                        Text="{Binding ElementName=SliderSlant, Path=Value, Mode=OneWay,
-                            Converter={StaticResource ValueToText}, ConverterParameter=\{0\}}"/>-->
+                            Converter={StaticResource ValueToText}, ConverterParameter='0'}"/>
+
+            <TextBlock x:Name="Segment_A" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left">Segment A</TextBlock>
+            <TextBlock x:Name="Points_A" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_B" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left">Segment B</TextBlock>
+            <TextBlock x:Name="Points_B" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_C" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left">Segment C</TextBlock>
+            <TextBlock x:Name="Points_C" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_D" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left">Segment D</TextBlock>
+            <TextBlock x:Name="Points_D" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_E" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left">Segment E</TextBlock>
+            <TextBlock x:Name="Points_E" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_F" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left">Segment F</TextBlock>
+            <TextBlock x:Name="Points_F" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_G" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left">Segment G</TextBlock>
+            <TextBlock x:Name="Points_G" Grid.Row="9" Grid.Column="2" HorizontalAlignment="Left"/>
         </Grid>
     </StackPanel>
 </Window>

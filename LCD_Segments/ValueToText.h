@@ -18,19 +18,20 @@ namespace winrt::LCD_Segments::implementation
 
 	struct ValueToText : ValueToTextT<ValueToText>
 	{
-		ValueToText() = default;
+	public:
+		ValueToText();
 
 		WF::IInspectable Convert(
 			WF::IInspectable const& value,
 			WUXI::TypeName const& targetType,
 			WF::IInspectable const& parameter,
-			winrt::hstring const& culture);
+			winrt::hstring const& language);
 
 		WF::IInspectable ConvertBack(
 			WF::IInspectable const& value,
 			WUXI::TypeName const& targetType,
 			WF::IInspectable const& parameter,
-			winrt::hstring const& culture);
+			winrt::hstring const& language);
 	};
 }
 
@@ -38,5 +39,6 @@ namespace winrt::LCD_Segments::factory_implementation
 {
 	struct ValueToText : ValueToTextT<ValueToText, implementation::ValueToText>
 	{
+
 	};
 }

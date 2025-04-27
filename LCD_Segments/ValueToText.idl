@@ -3,5 +3,6 @@ namespace LCD_Segments
     [default_interface]
     runtimeclass ValueToText : Microsoft.UI.Xaml.Data.IValueConverter
     {
+        ValueToText();
     }
 }

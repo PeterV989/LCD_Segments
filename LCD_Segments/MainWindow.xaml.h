@@ -1,6 +1,7 @@
 #pragma once
 #include "DebugHelpers.h"
 #include "MyDigit.h"
+#include "ValueToText.h"
 #include "MainWindow.g.h"
 
     namespace MUX = winrt::Microsoft::UI::Xaml;
@@ -18,32 +19,29 @@ namespace winrt::LCD_Segments::implementation
 
         // Event Handler(s)
         void OnLoaded(WF::IInspectable const&, MUX::RoutedEventArgs const&);
-        //void WidthSlider_ValueChanged(
-        //    Windows::Foundation::IInspectable const& d,
-        //    Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
+        void WidthSlider_ValueChanged(
+            Windows::Foundation::IInspectable const& d,
+            Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
 
-        //void HeightSlider_ValueChanged(
-        //    Windows::Foundation::IInspectable const&,
-        //    Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
+        void HeightSlider_ValueChanged(
+            Windows::Foundation::IInspectable const&,
+            Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
 
-        //void SlantSlider_ValueChanged(
-        //    Windows::Foundation::IInspectable const&,
-        //    Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
-        void UpdateTimer(WF::IInspectable const&, WF::IInspectable const&);
+        void SlantSlider_ValueChanged(
+            Windows::Foundation::IInspectable const&,
+            Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
 
 
-        //void DrawDigit();
-        //void UpdatePoints(winrt::Microsoft::UI::Xaml::Shapes::Polygon const& poly, MyPolygon const& polyPoints);
+        void DrawDigit();
 
-        winrt::LCD_Segments::implementation::MyDigit m_polygon;
+        MyDigit m_polygon;
 
     private:
         // event_token Loaded(RoutedEventHandler const& handler);
 
-        winrt::Microsoft::UI::Xaml::DispatcherTimer m_DeferUpdateTimer;
-        winrt::LCD_Segments::implementation::DebugHelpers m_dh;
+        DebugHelpers m_dh;
 
-        bool m_IsLoaded;
+        bool m_IsLoaded{false};
     };
 
 }

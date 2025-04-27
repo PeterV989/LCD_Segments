@@ -8,18 +8,23 @@
 
 namespace winrt::LCD_Segments::implementation
 {
+	ValueToText::ValueToText()
+	{
+
+	}
 
 	WF::IInspectable ValueToText::Convert(
 		[[maybe_unused]] WF::IInspectable const& value,
-		[[maybe_unused]] WUXI::TypeName const& type,
+		WUXI::TypeName const&,
 		[[maybe_unused]] WF::IInspectable const& parameter,
-		[[maybe_unused]] winrt::hstring const& culture)
+		winrt::hstring const&)
 	{
 		double valueDouble = 0;
 		int decimalPlaces = 0;
 		if (value != nullptr)
 		{
-			if (auto valueProperty = value.try_as<WF::IPropertyValue>())
+			auto valueProperty = value.try_as<WF::IPropertyValue>();
+			if (valueProperty != nullptr)
 			{
 				if (valueProperty.Type() == WF::PropertyType::Double)
 				{
@@ -52,9 +57,9 @@ namespace winrt::LCD_Segments::implementation
 
 	WF::IInspectable ValueToText::ConvertBack(
 		[[maybe_unused]] WF::IInspectable const& value,
-		[[maybe_unused]] WUXI::TypeName const& type,
+		WUXI::TypeName const&,
 		[[maybe_unused]] WF::IInspectable const& parameter,
-		[[maybe_unused]] winrt::hstring const& culture)
+		winrt::hstring const&)
 	{
 		return WUX::DependencyProperty::UnsetValue();
 	}

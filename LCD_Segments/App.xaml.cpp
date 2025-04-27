@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ValueToText.h"
-#include "App.xaml.h"
 #include "MainWindow.xaml.h"
+#include "App.xaml.h"
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
