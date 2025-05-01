@@ -2,14 +2,36 @@
 #include <string>
 #include <iostream>
 #include "MyDigit.h"
-
-namespace WF = winrt::Windows::Foundation;
-namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
+#if __has_include("MyDigit.g.cpp")
+#include "MyDigit.g.cpp"
+#endif
 
 namespace winrt::LCD_Segments::implementation
 {
 	MyDigit::MyDigit()
 	{
+		// Give the starting dimensions of the segments
+		// Each of the segments is built based on these
+		// dimensions. The dimensions here actually
+		// represent the endpoint, not the actual
+		// dimension.
+		m_width = 10.0f;
+		m_height = 2.0f;
+		m_slant = 0.0f;
+
+		// create a vector for each of the segments. The
+		// vector created here will store the (x,y) points
+		// for the vertices of the polygon it represents.
+		// The horizontal segments are created first.
+		// Each of the vertical segments relies on the
+		// adjacent horizontal polygons to define their
+		// shape.
+		m_segment = winrt::single_threaded_vector<MyPointCollection>();
+		for (int seg = static_cast<int>(Seg::A); seg <= static_cast<int>(Seg::G); seg++)
+		{
+			m_segment.Append(winrt::single_threaded_vector<WF::Point>());
+			m_segment.GetAt(seg).Clear();
+		}
 		BuildSegments();
 	}
 
@@ -35,92 +57,125 @@ namespace winrt::LCD_Segments::implementation
 	void MyDigit::BuildSegments()
 	{
 		// Segments A, G, and D must be built first. The other four rely on their coordinates.
-		BuildA();
-		BuildG();
-		BuildD();
-		BuildB();
-		BuildC();
-		BuildE();
-		BuildF();
+		Build(Seg::A);
+		Build(Seg::G);
+		Build(Seg::D);
+		Build(Seg::B);
+		Build(Seg::C);
+		Build(Seg::E);
+		Build(Seg::F);
 	}
 
-	void MyDigit::BuildA()
+	void MyDigit::Build(Seg seg)
 	{
-		/***********************************************************
-		* 0-------------------------------------------------------1
-		*   \                                                   /
-		*     3-----------------------------------------------2
-		************************************************************/
-		m_a_Segment.Clear();
-		m_a_Segment.Append(WF::Point(m_slant * 2.0f, 0.0f));
-		m_a_Segment.Append(WF::Point(m_a_Segment.GetAt(0).X + m_width, m_a_Segment.GetAt(0).Y));
-		m_a_Segment.Append(WF::Point(m_a_Segment.GetAt(1).X - m_height, m_a_Segment.GetAt(1).Y + m_height));
-		m_a_Segment.Append(WF::Point(m_a_Segment.GetAt(0).X + m_height, m_a_Segment.GetAt(2).Y));
+		int segIndex = static_cast<int>(seg);
+		m_segment.GetAt(segIndex).Clear();
+		switch (seg)
+		{
+		case Seg::A:
+			/***********************************************************
+			* 0-------------------------------------------------------1
+			*   \                                                   /
+			*     3-----------------------------------------------2
+			************************************************************/
+			m_segment.GetAt(segIndex).Append(WF::Point(m_slant * 2.0f, 0.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_width, m_segment.GetAt(segIndex).GetAt(0).Y));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(1).X - m_height, m_segment.GetAt(segIndex).GetAt(1).Y + m_height));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_height, m_segment.GetAt(segIndex).GetAt(2).Y));
+			break;
+
+		case Seg::G:
+			/***********************************************************
+			*   / 1-----------------------------------------------2 \
+			* 0                                                       3
+			*   \ 5-----------------------------------------------4 /
+			************************************************************/
+			m_segment.GetAt(segIndex).Append(WF::Point(m_slant, m_width));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_height, m_segment.GetAt(segIndex).GetAt(0).Y - m_height / 2.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_width - m_height, m_segment.GetAt(segIndex).GetAt(1).Y));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_width, m_segment.GetAt(segIndex).GetAt(0).Y));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(2).X, m_segment.GetAt(segIndex).GetAt(2).Y + m_height));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(1).X, m_segment.GetAt(segIndex).GetAt(4).Y));
+			break;
+
+		case Seg::D:
+			/***********************************************************
+			*     3-----------------------------------------------2
+			*   /                                                   \
+			* 0-------------------------------------------------------1
+			************************************************************/
+			m_segment.GetAt(segIndex).Append(WF::Point(0.0f, m_width * 2.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_width, m_segment.GetAt(segIndex).GetAt(0).Y));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(1).X - m_height, m_segment.GetAt(segIndex).GetAt(1).Y - m_height));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(segIndex).GetAt(0).X + m_height, m_segment.GetAt(segIndex).GetAt(2).Y));
+			break;
+
+		case Seg::B:
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(1).X, m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(1).Y + 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(3).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(3).Y - 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(2).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(2).Y - 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(2).X, m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(2).Y + 1.0f));
+			break;
+
+		case Seg::C:
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(3).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(3).Y + 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(1).X, m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(1).Y - 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(2).X, m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(2).Y - 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(4).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(4).Y + 1.0f));
+			break;
+
+		case Seg::E:
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(0).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(0).Y + 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(5).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(5).Y + 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(3).X, m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(3).Y - 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(0).X, m_segment.GetAt(static_cast<int>(Seg::D)).GetAt(0).Y - 1.0f));
+			break;
+
+		case Seg::F:
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(0).X, m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(0).Y + 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(3).X, m_segment.GetAt(static_cast<int>(Seg::A)).GetAt(3).Y + 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(1).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(1).Y - 1.0f));
+			m_segment.GetAt(segIndex).Append(WF::Point(m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(0).X, m_segment.GetAt(static_cast<int>(Seg::G)).GetAt(0).Y - 1.0f));
+			break;
+		}
 	}
 
-	void MyDigit::BuildG()
+	int MyDigit::Size(Seg seg)
 	{
-		/***********************************************************
-		*   / 1-----------------------------------------------2 \
-		* 0                                                       3
-		*   \ 5-----------------------------------------------4 /
-		************************************************************/
-		m_g_Segment.Clear();
-		m_g_Segment.Append(WF::Point(m_slant, m_width));
-		m_g_Segment.Append(WF::Point(m_g_Segment.GetAt(0).X + m_height, m_g_Segment.GetAt(0).Y - m_height / 2.0f));
-		m_g_Segment.Append(WF::Point(m_g_Segment.GetAt(0).X + m_width - m_height, m_g_Segment.GetAt(1).Y));
-		m_g_Segment.Append(WF::Point(m_g_Segment.GetAt(0).X + m_width, m_g_Segment.GetAt(0).Y));
-		m_g_Segment.Append(WF::Point(m_g_Segment.GetAt(2).X, m_g_Segment.GetAt(2).Y + m_height));
-		m_g_Segment.Append(WF::Point(m_g_Segment.GetAt(1).X, m_g_Segment.GetAt(4).Y));
+		return m_segment.GetAt(static_cast<int>(seg)).Size();
 	}
 
-	void MyDigit::BuildD()
+	WF::Point MyDigit::GetPoint(Seg seg, int point)
 	{
-		/***********************************************************
-		*     3-----------------------------------------------2
-		*   /                                                   \
-		* 0-------------------------------------------------------1
-		************************************************************/
-		m_d_Segment.Clear();
-		m_d_Segment.Append(WF::Point(0.0f, m_width * 2.0f ));
-		m_d_Segment.Append(WF::Point(m_d_Segment.GetAt(0).X + m_width, m_d_Segment.GetAt(0).Y));
-		m_d_Segment.Append(WF::Point(m_d_Segment.GetAt(1).X - m_height, m_d_Segment.GetAt(1).Y - m_height));
-		m_d_Segment.Append(WF::Point(m_d_Segment.GetAt(0).X + m_height, m_d_Segment.GetAt(2).Y));
+		return WF::Point(m_segment.GetAt(static_cast<int>(seg)).GetAt(point));
+	}
+	winrt::hstring MyDigit::GetNodeString(Seg seg)
+	{
+		std::wostringstream woss;
+		woss << std::fixed << std::setprecision(0);
+		for (WF::Point p : m_segment.GetAt(static_cast<int>(seg)))
+		{
+			woss << p.X << L"," << p.Y << L" ";
+		}
+		winrt::hstring points(L"");
+		std::wstring ret(woss.str());
+		if (!ret.empty() && (ret.length() > 1))
+			points = ret.substr(0, ret.length() - 1);
+		return points;
 	}
 
-	void MyDigit::BuildB()
+	winrt::hstring ToHString(Seg s)
 	{
-		m_b_Segment.Clear();
-		m_b_Segment.Append(WF::Point(m_a_Segment.GetAt(1).X, m_a_Segment.GetAt(1).Y));
-		m_b_Segment.Append(WF::Point(m_g_Segment.GetAt(3).X, m_g_Segment.GetAt(3).Y));
-		m_b_Segment.Append(WF::Point(m_g_Segment.GetAt(2).X, m_g_Segment.GetAt(2).Y));
-		m_b_Segment.Append(WF::Point(m_a_Segment.GetAt(2).X, m_a_Segment.GetAt(2).Y));
-	}
-
-	void MyDigit::BuildC()
-	{
-		m_c_Segment.Clear();
-		m_c_Segment.Append(WF::Point(m_g_Segment.GetAt(3).X, m_g_Segment.GetAt(3).Y));
-		m_c_Segment.Append(WF::Point(m_d_Segment.GetAt(1).X, m_d_Segment.GetAt(1).Y));
-		m_c_Segment.Append(WF::Point(m_d_Segment.GetAt(2).X, m_d_Segment.GetAt(2).Y));
-		m_c_Segment.Append(WF::Point(m_g_Segment.GetAt(4).X, m_g_Segment.GetAt(4).Y));
-	}
-
-	void MyDigit::BuildE()
-	{
-		m_e_Segment.Clear();
-		m_e_Segment.Append(WF::Point(m_g_Segment.GetAt(0).X, m_g_Segment.GetAt(0).Y));
-		m_e_Segment.Append(WF::Point(m_g_Segment.GetAt(5).X, m_g_Segment.GetAt(5).Y));
-		m_e_Segment.Append(WF::Point(m_d_Segment.GetAt(3).X, m_d_Segment.GetAt(3).Y));
-		m_e_Segment.Append(WF::Point(m_d_Segment.GetAt(0).X, m_d_Segment.GetAt(0).Y));
-	}
-
-	void MyDigit::BuildF()
-	{
-		m_f_Segment.Clear();
-		m_f_Segment.Append(WF::Point(m_a_Segment.GetAt(0).X, m_a_Segment.GetAt(0).Y));
-		m_f_Segment.Append(WF::Point(m_a_Segment.GetAt(3).X, m_a_Segment.GetAt(3).Y));
-		m_f_Segment.Append(WF::Point(m_g_Segment.GetAt(1).X, m_g_Segment.GetAt(1).Y));
-		m_f_Segment.Append(WF::Point(m_g_Segment.GetAt(0).X, m_g_Segment.GetAt(0).Y));
+		switch (s)
+		{
+		case Seg::A: return L"A";
+		case Seg::B: return L"B";
+		case Seg::C: return L"C";
+		case Seg::D: return L"D";
+		case Seg::E: return L"E";
+		case Seg::F: return L"F";
+		case Seg::G: return L"G";
+		default: return L"Unknown";
+		};
 	}
 }

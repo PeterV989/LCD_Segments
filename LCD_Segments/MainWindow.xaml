@@ -24,14 +24,15 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -72,20 +73,23 @@
                        Text="{Binding ElementName=SliderSlant, Path=Value, Mode=OneWay,
                             Converter={StaticResource ValueToText}, ConverterParameter='0'}"/>
 
-            <TextBlock x:Name="Segment_A" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left">Segment A</TextBlock>
-            <TextBlock x:Name="Points_A" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="Segment_B" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left">Segment B</TextBlock>
-            <TextBlock x:Name="Points_B" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="Segment_C" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left">Segment C</TextBlock>
-            <TextBlock x:Name="Points_C" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="Segment_D" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left">Segment D</TextBlock>
-            <TextBlock x:Name="Points_D" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="Segment_E" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left">Segment E</TextBlock>
-            <TextBlock x:Name="Points_E" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="Segment_F" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left">Segment F</TextBlock>
-            <TextBlock x:Name="Points_F" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="Segment_G" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left">Segment G</TextBlock>
-            <TextBlock x:Name="Points_G" Grid.Row="9" Grid.Column="2" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="Segment_A" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment A</TextBlock>
+            <TextBlock x:Name="Points_A" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Segment_B" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment B</TextBlock>
+            <TextBlock x:Name="Points_B" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Segment_C" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment C</TextBlock>
+            <TextBlock x:Name="Points_C" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Segment_D" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment D</TextBlock>
+            <TextBlock x:Name="Points_D" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Segment_E" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment E</TextBlock>
+            <TextBlock x:Name="Points_E" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Segment_F" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment F</TextBlock>
+            <TextBlock x:Name="Points_F" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Segment_G" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">Segment G</TextBlock>
+            <TextBlock x:Name="Points_G" Grid.Row="9" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <Button x:Name="CopyToClipboard" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Click="CopyToClipboard_Click" ClickMode="Press">Copy to Clipboard</Button>
         </Grid>
     </StackPanel>
 </Window>

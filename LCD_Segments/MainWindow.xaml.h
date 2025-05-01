@@ -6,6 +6,7 @@
 
     namespace MUX = winrt::Microsoft::UI::Xaml;
     namespace MUXC = MUX::Controls;
+    namespace MUXCP = MUXC::Primitives;
     namespace MUXS = MUX::Shapes;
     namespace MUXM = MUX::Media;
     namespace WF = winrt::Windows::Foundation;
@@ -20,16 +21,21 @@ namespace winrt::LCD_Segments::implementation
         // Event Handler(s)
         void OnLoaded(WF::IInspectable const&, MUX::RoutedEventArgs const&);
         void WidthSlider_ValueChanged(
-            Windows::Foundation::IInspectable const& d,
-            Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
+            WF::IInspectable const& d,
+            MUXCP::RangeBaseValueChangedEventArgs const& e);
 
         void HeightSlider_ValueChanged(
-            Windows::Foundation::IInspectable const&,
-            Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
+            WF::IInspectable const&,
+            MUXCP::RangeBaseValueChangedEventArgs const& e);
 
         void SlantSlider_ValueChanged(
-            Windows::Foundation::IInspectable const&,
-            Microsoft::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventArgs const& e);
+            WF::IInspectable const&,
+            MUXCP::RangeBaseValueChangedEventArgs const& e);
+
+        void LoadPoints(
+            MUXS::Polygon const& poly,
+            MUXC::TextBlock const& text,
+            Seg seg);
 
 
         void DrawDigit();
@@ -42,6 +48,8 @@ namespace winrt::LCD_Segments::implementation
         DebugHelpers m_dh;
 
         bool m_IsLoaded{false};
+    public:
+        void CopyToClipboard_Click(WF::IInspectable const& sender, MUX::RoutedEventArgs const& e) const;
     };
 
 }

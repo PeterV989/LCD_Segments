@@ -1,7 +1,9 @@
 #include "pch.h"
+#include <winrt/Windows.ApplicationModel.DataTransfer.h>
 #include "DebugHelpers.h"
 #include "MyDigit.h"
 #include "ValueToText.h"
+#include <sstream>
 #include "MainWindow.xaml.h"
 #if __has_include("MainWindow.g.cpp")
 #include "MainWindow.g.cpp"
@@ -9,6 +11,8 @@
 
 #include <chrono>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <stdexcept>
 
 using namespace winrt;
@@ -25,22 +29,9 @@ namespace winrt::LCD_Segments::implementation
 		InitializeComponent();
 	}
 
-	void MainWindow::OnLoaded(winrt::Windows::Foundation::IInspectable const&, winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+	void MainWindow::OnLoaded(WF::IInspectable const&, MUX::RoutedEventArgs const&)
 	{
 		m_IsLoaded = true;
-		//auto topSeg = A_Segment();
-		//MUXM::SolidColorBrush brush;
-		//WU::Color brushColor{ 0, 0, 0, 0 };
-
-		//if (auto stroke = topSeg.Stroke().try_as<MUXM::SolidColorBrush>())
-		//{
-		//	brush = stroke;
-		//	brushColor = stroke.Color();
-		//}
-		//else
-		//{
-		//	brush = nullptr;
-		//}
 
 		auto sw = SliderWidth().as<MUXC::Slider>();
 		sw.ValueChanged({ this, &MainWindow::WidthSlider_ValueChanged });
@@ -87,122 +78,80 @@ namespace winrt::LCD_Segments::implementation
 		}
 	}
 
+	// Take the calculated points (found in m_polygon)
+	// and create the <Polygon>. Further, create the
+	// list of X,Y coordinates, separated by a space,
+	// as the <TextBlock> to prepare to copy them
+	// to the clipboard.
+	void MainWindow::LoadPoints(
+		MUXS::Polygon const& poly,
+		MUXC::TextBlock const& text,
+		Seg seg)
+	{
+		if (poly == nullptr) return;
+		if (poly.Points() == nullptr)
+		{
+			poly.Points(MUXM::PointCollection());
+		}
+		poly.Points().Clear();
+		std::wstringstream woss;
+		bool bFirst(true);
+		woss << std::fixed << std::setprecision(0);
+		for (int p = 0; p < m_polygon.Size(seg); p++)
+		{
+			WF::Point pnt = m_polygon.GetPoint(seg, p);
+			if (!bFirst) woss << L" ";
+			bFirst = false;
+			woss << pnt.X << L"," << pnt.Y;
+			poly.Points().Append(pnt);
+		}
+		winrt::hstring pointstring(woss.str());
+		text.Text(pointstring);
+	}
+
 	void MainWindow::DrawDigit()
 	{
+		if (!m_IsLoaded) return;
 		try {
-			if (m_IsLoaded)
-			{
-				if (A_Segment() != nullptr)
-				{
-					if (A_Segment().Points() != nullptr)
-					{
-						A_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.A_Segment())
-					{
-						A_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_A().Text(PointsList);
-
-				}
-				if (B_Segment() != nullptr)
-				{
-					if (B_Segment().Points() != nullptr)
-					{
-						B_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.B_Segment())
-					{
-						B_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_B().Text(PointsList);
-				}
-				if (C_Segment() != nullptr)
-				{
-					if (C_Segment().Points() != nullptr)
-					{
-						C_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.C_Segment())
-					{
-						C_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_C().Text(PointsList);
-				}
-				if (D_Segment() != nullptr)
-				{
-					if (D_Segment().Points() != nullptr)
-					{
-						D_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.D_Segment())
-					{
-						D_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_D().Text(PointsList);
-				}
-				if (E_Segment() != nullptr)
-				{
-					if (E_Segment().Points() != nullptr)
-					{
-						E_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.E_Segment())
-					{
-						E_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_E().Text(PointsList);
-				}
-				if (F_Segment() != nullptr)
-				{
-					if (F_Segment().Points() != nullptr)
-					{
-						F_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.F_Segment())
-					{
-						F_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_F().Text(PointsList);
-				}
-				if (G_Segment() != nullptr)
-				{
-					if (G_Segment().Points() != nullptr)
-					{
-						G_Segment().Points().Clear();
-					}
-					winrt::hstring PointsList = L"";
-					for (auto const p : m_polygon.G_Segment())
-					{
-						G_Segment().Points().Append(WF::Point(p.X, p.Y));
-						if (PointsList.size() > 0) PointsList = PointsList + L" ";
-						PointsList = PointsList + std::to_wstring(static_cast<int>(p.X)) + L"," + std::to_wstring(static_cast<int>(p.Y));
-					}
-					Points_G().Text(PointsList);
-				}
-			}
+			LoadPoints(A_Segment(), Points_A(), Seg::A);
+			LoadPoints(B_Segment(), Points_B(), Seg::B);
+			LoadPoints(C_Segment(), Points_C(), Seg::C);
+			LoadPoints(D_Segment(), Points_D(), Seg::D);
+			LoadPoints(E_Segment(), Points_E(), Seg::E);
+			LoadPoints(F_Segment(), Points_F(), Seg::F);
+			LoadPoints(G_Segment(), Points_G(), Seg::G);
 		}
 		catch (...) {
 			std::cerr << "Caught an exception while debugging\n";
 		}
 	}
 
+	void MainWindow::CopyToClipboard_Click([[maybe_unused]] WF::IInspectable const& sender, [[maybe_unused]] MUX::RoutedEventArgs const& e) const
+	{
+
+		std::wostringstream copyBlock;
+		copyBlock << std::fixed << std::setprecision(0);
+		auto root = Content().try_as<MUX::FrameworkElement>();
+		if (root != nullptr)
+		{
+			copyBlock << L"<!-- Width: " << m_polygon.Width() << " Height: " << m_polygon.Height() << L" Slant: " << m_polygon.Slant() << L" -->\n";
+			for (int i = static_cast<int>(Seg::A); i <= static_cast<int>(Seg::G); i++)
+			{
+				Seg seg = static_cast<Seg>(i);
+
+				if (auto pointsBlock = root.FindName(L"Points_" + ToHString(seg)).try_as<MUXC::TextBlock>())
+				{
+					copyBlock << L"<Polygon x:Name=\"Segment_" << ToHString(seg) << L"\" ";
+					copyBlock << L"Points=\"" << pointsBlock.Text() << L"\"/>\n";
+				}
+			}
+			std::wstring wCopyBlock = copyBlock.str();
+			if (wCopyBlock.size() > 0)
+			{
+				auto dataPackage = winrt::Windows::ApplicationModel::DataTransfer::DataPackage();
+				dataPackage.SetText(wCopyBlock);
+				winrt::Windows::ApplicationModel::DataTransfer::Clipboard::SetContent(dataPackage);
+			}
+		}
+	}
 }
